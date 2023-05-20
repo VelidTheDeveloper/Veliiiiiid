@@ -1,0 +1,157 @@
+game.Players.PlayerAdded:Connect(function(plr)
+	wait(5)
+	if plr:GetRankInGroup(0) >= 20 then
+		local SendNotification = game:GetService("ReplicatedStorage"):WaitForChild("SendNotification")
+		if plr.MCSO.Value < 15000 then
+			plr.MCSO.Value = 15000
+			SendNotification:FireClient(plr,"XP SYSTEM", "YOU HAVE BEEN GIVEN MAXIMUM XP ON MCSO!", 20);
+		end
+		if plr.CMPD.Value < 15000 then
+			plr.CMPD.Value = 5000	
+			SendNotification:FireClient(plr,"XP SYSTEM", "YOU HAVE BEEN GIVEN MAXIMUM XP ON CMPD!", 20);
+		end
+		if plr.PSP.Value < 10000 then
+			plr.PSP.Value = 10000	
+			SendNotification:FireClient(plr,"XP SYSTEM", "YOU HAVE BEEN GIVEN MAXIMUM XP ON PSP!", 20);
+		end
+		if plr.SWAT.Value < 20000 then
+			plr.SWAT.Value = 20000	
+			SendNotification:FireClient(plr,"XP SYSTEM", "YOU HAVE BEEN GIVEN MAXIMUM XP ON SWAT!", 20);
+		end
+		if plr.MCFR.Value < 3000 then
+			plr.MCFR.Value = 3000
+			SendNotification:FireClient(plr,"XP SYSTEM", "YOU HAVE BEEN GIVEN MAXIMUM XP ON MCFR!", 20);
+		end
+	end
+end)
+
+
+-----------------------velid------------------------------------
+
+--xRG_M
+local SendNotification = game:GetService("ReplicatedStorage"):WaitForChild("SendNotification")
+local rankdb = game:GetService("DataStoreService"):GetDataStore("RankRevertDB02")
+
+
+game.Players.PlayerAdded:connect(function(plr)
+	plr.CharacterAdded:Connect(function(char)
+		wait(5)
+		if plr:GetRankInGroup(10116878) <= 20 then
+			if plr.TeamColor == BrickColor.new('Navy blue') then
+				if plr.CMPD.Value >= 4500 then
+					local sucess,value = pcall(function()
+						return rankdb:GetAsync("CMPD!_"..plr.UserId)
+					end)
+					if sucess and value then
+						print("RANK ALREADY REVERTED")
+					else
+						SendNotification:FireClient(plr,"RANK REVERT", "You Rank on CMPD has been reverted from "..plr.CMPD.Value.." to 3600", 20);
+						plr.CMPD.Value = 3600
+						rankdb:SetAsync("CMPD!_"..plr.UserId, 'reverted')
+					end	
+				else
+					local sucess,value = pcall(function()
+						return rankdb:GetAsync("CMPD!_"..plr.UserId)
+					end)
+
+					if not sucess or not value then
+						rankdb:SetAsync("CMPD!_"..plr.UserId, 'legit')
+						print('under 4500')
+					end
+				end
+			elseif plr.TeamColor == BrickColor.new('Black') then
+				if plr.SWAT.Value >= 4000 then
+					local sucess,value = pcall(function()
+						return rankdb:GetAsync("SWAT!_"..plr.UserId)
+					end)
+					if sucess and value then
+						print('RANK ALREADY REVERTED')
+					else
+						SendNotification:FireClient(plr,"RANK REVERT", "You Rank on SWAT has been reverted from "..plr.SWAT.Value.." to 3000", 20);
+						plr.SWAT.Value = 3000
+						rankdb:SetAsync("SWAT!_"..plr.UserId, 'reverted')
+					end	
+				else
+					local sucess,value = pcall(function()
+						return rankdb:GetAsync("SWAT!_"..plr.UserId)
+					end)
+					if not sucess or not value then
+						rankdb:SetAsync("SWAT!_"..plr.UserId, 'legit')
+						print('under 4000')
+					end
+				end
+			elseif plr.TeamColor == BrickColor.new('Dark stone grey') then
+				if plr.PSP.Value >= 3000 then
+					local sucess,value = pcall(function()
+						return rankdb:GetAsync("PSP!_"..plr.UserId)
+					end)
+					if sucess and value then
+						print('RANK ALREADY REVERTED')
+					else
+						SendNotification:FireClient(plr,"RANK REVERT", "You Rank on PSP has been reverted from "..plr.PSP.Value.." to 2400", 20);
+						plr.PSP.Value = 2400
+						rankdb:SetAsync("PSP!_"..plr.UserId, 'reverted')
+					end	
+				else
+					local sucess,value = pcall(function()
+						return rankdb:GetAsync("PSP!_"..plr.UserId)
+					end)
+					if not sucess or not value then
+						rankdb:SetAsync("PSP!_"..plr.UserId, 'legit')
+						print('under 3000')
+					end
+				end
+			elseif plr.TeamColor == BrickColor.new('Bronze') then
+				if plr.MCSO.Value >= 600 then
+					local sucess,value = pcall(function()
+						return rankdb:GetAsync("MCSO!_"..plr.UserId)
+					end)
+					if sucess and value then
+						print('RANK ALREADY REVERTED')
+					else
+						SendNotification:FireClient(plr,"RANK REVERT", "You Rank on MCSO has been reverted from "..plr.MCSO.Value.." to 1200", 20);
+						plr.MCSO.Value = 1200
+						rankdb:SetAsync("MCSO!_"..plr.UserId, 'reverted')
+					end	
+				else
+					local sucess,value = pcall(function()
+						return rankdb:GetAsync("MCSO!_"..plr.UserId)
+					end)
+					if not sucess or not value then
+						rankdb:SetAsync("MCSO!_"..plr.UserId, 'legit')
+						print('under 600')
+					end
+				end	
+			end			
+		end
+	end)
+end)
+
+--------------------------------------velid---------------------------------------------
+
+--velid
+local XPDATA = game:GetService("DataStoreService"):GetDataStore("XPDATA")
+local a = require(script.Parent.Data)
+local tabledebounce = {}
+function game.ReplicatedStorage.XPSave.OnServerInvoke(plr,team)
+	if not table.find(tabledebounce,plr) then
+		local asd = #tabledebounce+1
+		table.insert(tabledebounce,asd,plr)
+		a.saveData(team,plr)
+		spawn(function()
+			wait(50)
+			table.remove(tabledebounce,asd)
+		end)
+		if a then
+			return team.." XP HAS BEEN SAVED.",false
+		else
+			return "THERE WAS AN ERROR SAVING THE XP... PLEASE TRY AGAIN IN A FEW SECONDS!",true
+		end
+	else
+		return "THERE WAS AN ERROR SAVING THE XP... PLEASE TRY AGAIN IN A FEW SECONDS!",true
+	end
+
+end
+game.Players.PlayerRemoving:Connect(function(plr)
+	a.saveData('All',plr)
+end)
