@@ -1,0 +1,101 @@
+local database = {}
+
+local arrestsDS = game:GetService("DataStoreService"):GetDataStore("Database","Arrests")
+local citationsDS = game:GetService("DataStoreService"):GetDataStore("Database","Citations")
+local warrantsDS = game:GetService("DataStoreService"):GetDataStore("Database","Warrants")
+
+local httpService = game.HttpService
+
+local keyprefix = "VELID_DATABASE_SYSTEMS_22_22_22_77"
+
+function database.AddArrest(plr,officer,reason)
+	print(plr.Name)
+	local key = keyprefix..plr.userId
+	local record = arrestsDS:GetAsync(key)
+	if record then
+		table.insert(record,{plr.Name,officer.Name,reason})
+		arrestsDS:SetAsync(key,record)
+	else
+		local firstsave = {{plr.Name,officer.Name,reason}}
+		arrestsDS:SetAsync(key,firstsave)
+	end
+end
+function database.GetArrestRecords(plr)
+	local key = keyprefix..plr.userId
+	local record = arrestsDS:GetAsync(key)
+	if record then
+		return record
+	else
+		return {}
+	end
+end
+function database.ResetArrestRecords(plr)
+	local key = keyprefix..plr.userId
+	arrestsDS:SetAsync(key,{})
+end
+
+--------
+
+function database.AddCitation(plr,officer,reason,amount)
+	local key = keyprefix..plr.userId
+	local record = citationsDS:GetAsync(key)
+	if record then
+		table.insert(record,{plr.Name.Name,reason,amount})
+		citationsDS:SetAsync(key,record)
+	else
+		print("record doesnt exist")
+		local firstsave = {{plr.Name.Name,reason,amount}}
+		for i,v in pairs(firstsave) do
+			for _,record in pairs(v) do
+				print(record)
+			end
+		end
+		citationsDS:SetAsync(key,firstsave)
+	end
+end
+function database.GetCitationRecords(plr)
+	local key = keyprefix..plr.userId
+	local record = citationsDS:GetAsync(key)
+	if record then
+		return record
+	else
+		return {}
+	end
+end
+function database.ResetCitationRecords(plr)
+	local key = keyprefix..plr.userId
+	citationsDS:SetAsync(key,{})
+end
+
+----------
+
+function database.AddWarrant(plr,reason)
+	print("RANNNN")
+	local key = keyprefix..plr.userId
+	local warrant = warrantsDS:GetAsync(key)
+	if warrant then
+		warrantsDS:SetAsync(key,reason)
+	else
+		warrantsDS:SetAsync(key,reason)
+	end
+end
+function database.RemoveWarrant(plr)
+	local key = keyprefix..plr.userId
+	local warrant = warrantsDS:GetAsync(key)
+	if warrant then
+		warrantsDS:SetAsync(key,"")
+	end
+end
+function database.GetWarrant(plr)
+	print("RANNNN222")
+	local key = keyprefix..plr.userId
+	local warrant = warrantsDS:GetAsync(key)
+	if warrant then
+		return warrant
+	else
+		return ""
+	end
+end
+
+return database
+-- suck velid cause of he is pro front end coder
